@@ -1,21 +1,20 @@
 <template>
-    <div class="grid grid-cols-4">
-        <div class="col-span-4" :class="$page.reports.length > 0 ? 'lg:col-span-3 lg:pr-4' : ''">
-            <div class="bg-white shadow overflow-hidden sm:rounded-md">
-                <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                    <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">
-                        <div class="ml-4 mt-4 min-w-0">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">
-                                Error occured on {{ e.website }}
-                                <a :href="e.vars.request.url" class="ml-1" target="_blank">
-                                    <i class="fas fa-link text-sm text-indigo-600"></i>
-                                </a>
-                            </h3>
-                            <p class="mt-1 text-sm leading-5 text-gray-500 truncate">
-                                {{ error }}
-                            </p>
-                        </div>
-                        <div class="ml-4 mt-4 flex-shrink-0">
+    <div>
+        <div class="bg-white shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">
+                    <div class="ml-4 mt-4 min-w-0">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                            Error occured on {{ e.website }}
+                            <a :href="e.vars.request.url" class="ml-1" target="_blank">
+                                <i class="fas fa-link text-sm text-indigo-600"></i>
+                            </a>
+                        </h3>
+                        <p class="mt-1 text-sm leading-5 text-gray-500 truncate">
+                            {{ error }}
+                        </p>
+                    </div>
+                    <div class="ml-4 mt-4 flex-shrink-0">
                             <span class="inline-flex rounded-md shadow-sm">
                                 <button type="button" v-if="e.resolved_at" @click="updateReport({resolved: false})"
                                         class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-500 hover:bg-red-700 transition-all duration-150 focus:outline-none">
@@ -26,41 +25,40 @@
                                     Mark as resolved
                                 </button>
                             </span>
-                            <i class="fas fa-trash-alt text-red-600 mx-2 cursor-pointer hover:text-red-800"
-                               @click="deleteItemModal = true"></i>
-                            <p class="text-xs text-gray-500" v-if="e.resolved_at">
-                                By {{ e.user.name }} on {{ moment(e.resolved_at).format('MMMM Do, YYYY') }}
-                            </p>
-                        </div>
+                        <i class="fas fa-trash-alt text-red-600 mx-2 cursor-pointer hover:text-red-800"
+                           @click="deleteItemModal = true"></i>
+                        <p class="text-xs text-gray-500" v-if="e.resolved_at">
+                            By {{ e.user.name }} on {{ moment(e.resolved_at).format('MMMM Do, YYYY') }}
+                        </p>
                     </div>
                 </div>
-
-                <div class="p-4">
-                    <div class="sm:hidden">
-                        <select class="form-select block w-full" v-model="activeTabId">
-                            <option v-for="(tab, id) in tabs" :key="id" :value="id">{{ tab.title }}</option>
-                        </select>
-                    </div>
-                    <div class="hidden sm:block">
-                        <nav class="flex justify-center">
-                            <a href="#" v-for="(tab, id) in tabs" :key="id" @click="activeTabId = id"
-                               class="mx-2 px-3 py-2 font-medium text-sm leading-5 rounded-md  focus:outline-none select-none"
-                               :class="id === activeTabId ? 'text-indigo-700 bg-indigo-100' : 'text-gray-500 hover:text-gray-700'">
-                                {{ tab.title }}
-                            </a>
-                        </nav>
-                    </div>
-                </div>
-
-                <component :is="activeTab.component"/>
             </div>
+
+            <div class="p-4">
+                <div class="sm:hidden">
+                    <select class="form-select block w-full" v-model="activeTabId">
+                        <option v-for="(tab, id) in tabs" :key="id" :value="id">{{ tab.title }}</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block">
+                    <nav class="flex justify-center">
+                        <a href="#" v-for="(tab, id) in tabs" :key="id" @click="activeTabId = id"
+                           class="mx-2 px-3 py-2 font-medium text-sm leading-5 rounded-md  focus:outline-none select-none"
+                           :class="id === activeTabId ? 'text-indigo-700 bg-indigo-100' : 'text-gray-500 hover:text-gray-700'">
+                            {{ tab.title }}
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <component :is="activeTab.component"/>
         </div>
-        <div class="col-span-1 hidden lg:block" v-if="$page.reports.length > 0">
+        <!--<div class="col-span-1 hidden lg:block" v-if="$page.reports.length > 0">
             <div class="text-gray-400 text-center">
                 Other reports from {{ e.website }}
             </div>
             <reports-list/>
-        </div>
+        </div>-->
         <modal v-model="deleteItemModal">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
