@@ -4,6 +4,8 @@
 
 @import "~tailwindcss/utilities";
 
+@import "~highlight.js/styles/github-gist.css";
+
 .fade-enter-active, .fade-leave-active {
     transition: opacity .3s;
 }
