@@ -13,17 +13,12 @@
 
             <template v-else-if="type === 'select'">
                 <div class="relative">
-                    <select :class="$page.errors[name] ? 'border border-red-500' : ''"
+                    <select :class="$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'"
                             :id="name" :value="value" ref="select" @input="update"
-                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                            class="shadow-sm form-select block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
                         <option value="" disabled selected v-if="label">> {{ label }}</option>
                         <slot/>
                     </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
-                    </div>
                 </div>
             </template>
 
@@ -59,8 +54,8 @@
 
             <template v-else>
                 <input style="padding-right: 27px;"
-                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-indigo-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                       :class="$page.errors[name] ? 'border border-red-500' : ''" :id="name" :type="type"
+                       class="shadow-sm appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                       :class="$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'" :id="name" :type="type"
                        :placeholder="placeholder || label" @input="update" :value="value" ref="input">
             </template>
             <a href="javascript:" class="absolute text-gray-400 font-bold" v-if="withClear && value"

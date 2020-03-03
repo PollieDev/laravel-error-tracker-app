@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\ReportResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -34,21 +35,11 @@ class Report extends Model
     }
 
     public static function GetList($where = []) {
-        return Report::with('user')
-            ->where($where)
-            ->get()
-            ->map(function(Report $report) {
-                return [
-                    "uuid" => $report->uuid,
-                    "website" => $report->website,
-                    "message" => $report->vars["message"],
-                    "resolved_at" => $report->resolved_at,
-                    "created_at" => $report->created_at,
-                    "user" => $report->user ? [
-                        "name" => $report->user->name
-                    ] : null
-                ];
-            });
+        return ReportResource::collection(
+            Report::with('user')
+                ->where($where)
+                ->get()
+        );
     }
 
 }

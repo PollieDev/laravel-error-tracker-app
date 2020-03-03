@@ -1,10 +1,12 @@
 @import "~tailwindcss/base";
-
 @import "~tailwindcss/components";
-
 @import "~tailwindcss/utilities";
 
 @import "~highlight.js/styles/github-gist.css";
+
+html, body {
+    height: 100%;
+}
 
 .fade-enter-active, .fade-leave-active {
     transition: opacity .3s;

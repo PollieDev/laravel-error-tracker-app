@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Resources\UserResource;
 use Carbon\CarbonImmutable;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\UrlWindow;
@@ -48,18 +49,12 @@ class AppServiceProvider extends ServiceProvider
             },
             'auth'   => function() {
                 return [
-                    'user' => Auth::user() ? [
-                        'id'           => Auth::user()->id,
-                        'name'         => Auth::user()->name,
-                        'email'        => Auth::user()->email,
-                        'hashed_email' => md5(Auth::user()->email),
-                    ] : null,
+                    'user' => Auth::user() ? new UserResource(Auth::user()) : null,
                 ];
             },
             'flash'  => function() {
                 return [
-                    'success' => Session::get('success'),
-                    'error'   => Session::get('error'),
+                    'message' => Session::get('message'),
                 ];
             },
             'errors' => function() {

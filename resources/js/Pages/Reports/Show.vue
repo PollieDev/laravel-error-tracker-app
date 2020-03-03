@@ -112,9 +112,6 @@
 
     export default {
         components: {Modal, ReportsList},
-        metaInfo: {
-            title: 'Error reports'
-        },
         layout: Layout,
         data() {
             return {

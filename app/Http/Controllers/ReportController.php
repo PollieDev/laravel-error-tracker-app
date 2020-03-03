@@ -9,8 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class ReportsController extends Controller
+class ReportController extends Controller
 {
+    public function __construct() {
+        $this
+            ->middleware('powerlevel:50')
+            ->only('update');
+    }
 
     public function webhook(Request $request) {
         $rawPostData = file_get_contents("php://input");
@@ -28,7 +33,7 @@ class ReportsController extends Controller
         });
         return Inertia::render('Reports/Index', [
             "meta"    => [
-                "title" => "All reports"
+                "title" => "Unhandeled reports"
             ],
             "reports" => $reports
         ]);
@@ -59,12 +64,15 @@ class ReportsController extends Controller
         unset($data["resolved"]);
         $report->update($data);
 
-        return back();
+        return back()->with('message', $data["resolved_at"] ?
+            'Error has been marked as resolved' :
+            'Error has been marked as unresolved'
+        );
     }
 
     public function destroy(Report $report) {
         $report->delete();
-        return redirect()->route('reports.index');
+        return redirect()->route('reports.index')->with('message', 'Error has been deleted.');
     }
 
 }

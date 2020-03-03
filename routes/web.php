@@ -14,6 +14,9 @@
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function() {
-    Route::get('/', 'ReportsController@index')->name('dashboard');
-    Route::resource('reports', 'ReportsController')->only('index', 'show', 'update', 'destroy');
+    Route::get('/', 'ReportController@index')->name('dashboard');
+    Route::resource('reports', 'ReportController')->only('index', 'show', 'update', 'destroy');
+    Route::resource('users', 'UserController')
+        ->except('show')
+        ->middleware('powerlevel:100');
 });

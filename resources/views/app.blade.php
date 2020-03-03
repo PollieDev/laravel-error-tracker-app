@@ -14,5 +14,7 @@
 
 @inertia
 
+<link rel="stylesheet" href="{{ asset('libs/snackbar/snackbar.min.css') }}">
+<script src="{{ asset('libs/snackbar/snackbar.min.js') }}"></script>
 </body>
 </html>

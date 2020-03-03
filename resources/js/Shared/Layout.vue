@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col h-full">
         <nav @keydown.window.escape="open = false" class="bg-gray-800">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -11,7 +11,8 @@
                             <div class="ml-10 flex items-baseline">
                                 <inertia-link :href="route(item.route)" v-for="item in menu" :key="item.route"
                                               class="ml-4 px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
-                                              :class="route().current(item.is || item.route) ? 'text-white bg-gray-900' : 'text-gray-300 hover:text-white hover:bg-gray-700'">
+                                              :class="route().current(item.is || item.route) ? 'text-white bg-gray-900' : 'text-gray-300 hover:text-white hover:bg-gray-700'"
+                                              v-if="$page.auth.user.role.powerlevel >= (item.powerlevel || 0)">
                                     {{ item.title }}
                                 </inertia-link>
                             </div>
@@ -31,7 +32,7 @@
                                     <button @click.stop="open = !open"
                                             class="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid">
                                         <img class="h-8 w-8 rounded-full"
-                                             :src="`https://www.gravatar.com/avatar/${$page.auth.user.hashed_email}?d=${$page.app.logos.light}`"
+                                             :src="$page.auth.user.avatar"
                                              :alt="`Gravatar ${$page.auth.user.name}`"
                                              alt=""/>
                                     </button>
@@ -73,7 +74,8 @@
                 <div class="px-2 pt-2 pb-3 sm:px-3">
                     <inertia-link :href="route(item.route)" v-for="item in menu" :key="item.route"
                                   class="block mt-1 px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
-                                  :class="route().current(item.is || item.route) ? 'text-white bg-gray-900' : 'text-gray-300 hover:text-white hover:bg-gray-700'">
+                                  :class="route().current(item.is || item.route) ? 'text-white bg-gray-900' : 'text-gray-300 hover:text-white hover:bg-gray-700'"
+                                  v-if="$page.auth.user.role.powerlevel >= (item.powerlevel || 0)">
                         {{ item.title }}
                     </inertia-link>
                 </div>
@@ -110,16 +112,16 @@
                 </div>
             </div>
         </nav>
-        <header class="bg-white shadow">
+        <header class="bg-white shadow" v-if="$page.meta && $page.meta.title">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl font-bold leading-tight text-gray-900">
-                    {{ $page.meta && $page.meta.title ? $page.meta.title : "Unknown page" }}
+                    {{ $page.meta.title }}
                 </h2>
             </div>
         </header>
-        <main>
-            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div class="px-4 py-3 sm:px-0">
+        <main class="flex-grow">
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 h-full">
+                <div class="px-4 py-3 sm:px-0 h-full">
                     <slot/>
                 </div>
             </div>
@@ -134,16 +136,39 @@
             return {
                 open: false,
                 menu: [
-                    {
+                    /*{
                         title: "Dashboad",
                         route: "dashboard"
-                    },
+                    },*/
                     {
                         title: "Reports / Errors",
                         route: "reports.index",
-                        is: "reports.*"
+                        is: "reports.*",
+                        powerlevel: 0
+                    },
+                    {
+                        title: "Users",
+                        route: "users.index",
+                        is: "users.*",
+                        powerlevel: 100
                     }
                 ]
+            }
+        },
+        mounted() {
+            this.updateMeta();
+        },
+        updated() {
+            this.updateMeta();
+        },
+        methods: {
+            updateMeta() {
+                document.title = this.$page.meta && this.$page.meta.title ? this.$page.meta.title : "Unknown page";
+
+                if (this.$page.flash.message) {
+                    this.snackbar(this.$page.flash.message);
+                    this.$page.flash.message = null;
+                }
             }
         }
     }

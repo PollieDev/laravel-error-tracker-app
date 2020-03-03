@@ -11,4 +11,4 @@
 |
 */
 
-Route::post('report', 'ReportsController@webhook');
+Route::post('report', 'ReportController@webhook');
