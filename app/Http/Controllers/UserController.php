@@ -6,6 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -116,6 +117,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->id === Auth::id())
+            return back()->with('message', "You can't delete yourself!");
+
         $user->delete();
         return back()->with('message', "{$user->name} has been deleted.");
     }
