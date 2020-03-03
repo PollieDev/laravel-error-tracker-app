@@ -52,6 +52,7 @@ class Handler extends ExceptionHandler
         $response = parent::render($request, $exception);
 
         if (in_array($response->status(), [401])) {
+
             return Inertia::render('Errors/' . $response->status(), [])
                 ->toResponse($request)
                 ->setStatusCode($response->status());

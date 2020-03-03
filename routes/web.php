@@ -20,3 +20,7 @@ Route::group(['middleware' => 'auth'], function() {
         ->except('show')
         ->middleware('powerlevel:100');
 });
+
+Route::fallback(function(){
+    return \Inertia\Inertia::render('Errors/404');
+});
