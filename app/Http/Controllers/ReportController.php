@@ -11,6 +11,7 @@ use Inertia\Inertia;
 
 class ReportController extends Controller
 {
+
     public function __construct() {
         $this
             ->middleware('powerlevel:50')
@@ -28,28 +29,46 @@ class ReportController extends Controller
     }
 
     public function index(Request $request) {
-        $reports = Report::GetList(function(Builder $q) {
-            $q->whereNull('resolved_at');
+        $title = "";
+        $reports = Report::GetList(function(Builder $q) use ($request, &$title) {
+            if ($request->get('all') === "true") {
+                $title = "All";
+            } else {
+                $title = "Unhandeled";
+                $q->whereNull('resolved_at');
+            }
+
+            $title .= " reports";
+
+            if ($website = $request->get('website')) {
+                $title .= " from {$website}";
+                $q->where('website', "LIKE", "%$website%");
+            }
         });
         return Inertia::render('Reports/Index', [
             "meta"    => [
-                "title" => "Unhandeled reports"
+                "title" => $title
             ],
-            "reports" => $reports
+            "reports" => $reports,
+            "filters" => [
+                "all" => $request->get('all') === "true",
+                "website" => $request->get('website')
+            ]
         ]);
     }
 
     public function show(Request $request, Report $report) {
-        $reports = Report::GetList(function(Builder $q) use ($report) {
-            $q->where('website', $report->website);
-            $q->where('id', '!=', $report->id);
-        });
         $report->load('user');
+        $reports_count = Report::query()
+            ->where('website', $report->website)
+            ->where('id', '!=', $report->id)
+            ->count();
+
         return Inertia::render('Reports/Show', [
             "meta"    => [
                 "title" => "Report detail of " . $report->website
             ],
-            "reports" => $reports,
+            "reports_count" => $reports_count,
             "report"  => $report
         ]);
     }

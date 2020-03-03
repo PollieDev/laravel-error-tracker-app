@@ -82,7 +82,8 @@ class UserController extends Controller
                 'title' => 'Editing user ' . $user->name
             ],
             'user' => new UserResource($user),
-            'roles' => $roles
+            'roles' => $roles,
+            "admin_edit" => true
         ]);
     }
 

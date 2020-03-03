@@ -1,5 +1,12 @@
 <template>
     <div>
+        <div class="text-center md:flex justify-between mb-1 px-2 text-sm text-gray-400" v-if="$page.reports_count > 0">
+            <p>{{ $page.reports_count }} other report{{ $page.reports_count > 1 ? 's' : '' }} found on this website</p>
+            <inertia-link :href="`${route('reports.index')}?website=${ e.website }&all=true`"
+                          class="text-indigo-400 hover:text-indigo-500 transition-colors duration-150">
+                View all reports of this website
+            </inertia-link>
+        </div>
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
                 <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">
@@ -15,16 +22,16 @@
                         </p>
                     </div>
                     <div class="ml-4 mt-4 flex-shrink-0">
-                            <span class="inline-flex rounded-md shadow-sm">
-                                <button type="button" v-if="e.resolved_at" @click="updateReport({resolved: false})"
-                                        class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-500 hover:bg-red-700 transition-all duration-150 focus:outline-none">
-                                    Mark as unresolved
-                                </button>
-                                <button type="button" v-else @click="updateReport({resolved: true})"
-                                        class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-green-500 hover:bg-green-800 transition-all duration-150 focus:outline-none">
-                                    Mark as resolved
-                                </button>
-                            </span>
+                        <span class="inline-flex rounded-md shadow-sm">
+                            <button type="button" v-if="e.resolved_at" @click="updateReport({resolved: false})"
+                                    class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-red-500 hover:bg-red-700 transition-all duration-150 focus:outline-none">
+                                Mark as unresolved
+                            </button>
+                            <button type="button" v-else @click="updateReport({resolved: true})"
+                                    class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-green-500 hover:bg-green-800 transition-all duration-150 focus:outline-none">
+                                Mark as resolved
+                            </button>
+                        </span>
                         <i class="fas fa-trash-alt text-red-600 mx-2 cursor-pointer hover:text-red-800"
                            @click="deleteItemModal = true"></i>
                         <p class="text-xs text-gray-500" v-if="e.resolved_at">
@@ -53,12 +60,6 @@
 
             <component :is="activeTab.component"/>
         </div>
-        <!--<div class="col-span-1 hidden lg:block" v-if="$page.reports.length > 0">
-            <div class="text-gray-400 text-center">
-                Other reports from {{ e.website }}
-            </div>
-            <reports-list/>
-        </div>-->
         <modal v-model="deleteItemModal">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
@@ -83,18 +84,18 @@
                 </div>
             </div>
             <div class="bg-gray-100 p-4 sm:px-6 sm:py-4 sm:flex sm:flex-row-reverse">
-              <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                <button @click="deleteError" type="button"
-                        class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                  Delete
-                </button>
-              </span>
+                <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                    <button @click="deleteError" type="button"
+                            class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        Delete
+                    </button>
+                </span>
                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                <button @click="deleteItemModal = false" type="button"
-                        class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                  Cancel
-                </button>
-              </span>
+                    <button @click="deleteItemModal = false" type="button"
+                            class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        Cancel
+                    </button>
+                </span>
             </div>
         </modal>
     </div>
@@ -102,7 +103,6 @@
 
 <script>
     import Layout from '@/Shared/Layout';
-    import ReportsList from "../../Shared/ReportsList";
     import StackTrace from "./Tabs/StackTrace";
     import Request from "./Tabs/Request";
     import Modal from "../../Shared/Modal";
@@ -111,7 +111,7 @@
     import moment from 'moment';
 
     export default {
-        components: {Modal, ReportsList},
+        components: {Modal},
         layout: Layout,
         data() {
             return {

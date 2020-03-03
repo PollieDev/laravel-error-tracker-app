@@ -20,9 +20,9 @@
                                 </div>
 
                                 <div class="sm:col-span-3">
-                                    <input-val type="select" v-model="user.role_id" name="role_id" label="Role">
-                                        <option v-for="role in $page.roles" :key="role.id" :value="role.id">{{ role.name
-                                            }}
+                                    <input-val type="select" v-model="user.role_id" name="role_id" label="Role" :disabled="!$page.admin_edit">
+                                        <option v-for="role in $page.roles" :key="role.id" :value="role.id">
+                                            {{ role.name }}
                                         </option>
                                     </input-val>
                                 </div>
@@ -59,6 +59,10 @@
                                 </h3>
                             </div>
                             <div class="mt-6 grid grid-cols-1 row-gap-6 col-gap-4 sm:grid-cols-6">
+                                <div class="sm:col-span-6">
+                                    <input-val type="password" v-model="user.current_password" name="current_password"
+                                               label="Current password" v-if="!$page.admin_edit"/>
+                                </div>
                                 <div class="sm:col-span-3">
                                     <input-val type="password" v-model="user.password" name="password"
                                                label="Password"/>
@@ -200,7 +204,12 @@
                 this.$inertia.post(this.route('users.store'), this.user);
             },
             updateUser() {
-                this.$inertia.patch(this.route('users.update', this.user.id), this.user);
+                let route = this.route('settings');
+
+                if (this.$page.admin_edit)
+                    route = this.route('users.update', this.user.id);
+
+                this.$inertia.patch(route, this.user);
             }
         }
     }

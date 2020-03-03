@@ -16,11 +16,11 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/', 'ReportController@index')->name('dashboard');
     Route::resource('reports', 'ReportController')->only('index', 'show', 'update', 'destroy');
-    Route::resource('users', 'UserController')
-        ->except('show')
-        ->middleware('powerlevel:100');
-});
+    Route::resource('users', 'UserController')->except('show')->middleware('powerlevel:100');
+    Route::get('settings', 'SettingsController@show')->name('settings');
+    Route::patch('settings', 'SettingsController@update')->name('settings');
 
-Route::fallback(function(){
-    return \Inertia\Inertia::render('Errors/404');
+    Route::fallback(function(){
+        return \Inertia\Inertia::render('Errors/404');
+    });
 });

@@ -42,10 +42,10 @@
                                     <div class="py-1 rounded-md bg-white shadow-xs">
                                         <!--<a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Your Profile
-                                        </a>
-                                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            Settings
                                         </a>-->
+                                        <inertia-link :href="route('settings')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" @click="open = false">
+                                            Settings
+                                        </inertia-link>
                                         <inertia-link :href="route('logout')" method="post"
                                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                             Sign out
@@ -99,15 +99,15 @@
                         <!--<a href="#"
                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700">
                             Your Profile
-                        </a>
-                        <a href="#"
+                        </a>-->
+                        <inertia-link :href="route('settings')"
                            class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700">
                             Settings
-                        </a>-->
-                        <a href="#"
+                        </inertia-link>
+                        <inertia-link :href="route('logout')" method="post"
                            class="mt-1 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700">
                             Sign out
-                        </a>
+                        </inertia-link>
                     </div>
                 </div>
             </div>

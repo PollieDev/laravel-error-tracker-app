@@ -1,6 +1,7 @@
 <template>
     <div :class="groupClass">
-        <label class="block text-sm font-medium leading-5 text-gray-700" :for="name" v-if="label && type !== 'checkbox'">
+        <label class="block text-sm font-medium leading-5 text-gray-700" :for="name"
+               v-if="label && type !== 'checkbox'">
             {{ label }}
         </label>
 
@@ -13,9 +14,9 @@
 
             <template v-else-if="type === 'select'">
                 <div class="relative">
-                    <select :class="$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'"
-                            :id="name" :value="value" ref="select" @input="update"
-                            class="shadow-sm form-select block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                    <select :class="`${$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'} ${disabled ? 'bg-gray-200' : ''}`"
+                            class="shadow-sm form-select block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                            :id="name" :value="value" ref="select" @input="update" :disabled="disabled">
                         <option value="" disabled selected v-if="label">> {{ label }}</option>
                         <slot/>
                     </select>
@@ -43,9 +44,9 @@
 
             <template v-else-if="type === 'checkbox'">
                 <div class="flex items-center">
-                    <input :class="$page.errors[name] ? 'border border-red-500' : ''" :id="name" :type="type"
+                    <input :class="`${$page.errors[name] ? 'border border-red-500' : ''}  ${disabled ? 'bg-gray-200' : ''}`" :id="name" :type="type"
                            class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                           :placeholder="placeholder || label" @change="update" :checked="value">
+                           :placeholder="placeholder || label" @change="update" :checked="value" :disabled="disabled">
                     <label class="ml-2 block text-sm leading-5 text-gray-900" :for="name" v-if="label">
                         {{ label }}
                     </label>
@@ -55,7 +56,8 @@
             <template v-else>
                 <input style="padding-right: 27px;"
                        class="shadow-sm appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                       :class="$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'" :id="name" :type="type"
+                       :class="`${$page.errors[name] ? 'border border-red-500 focus:shadow-outline-red' : 'focus:shadow-outline-blue focus:border-indigo-300'}  ${disabled ? 'bg-gray-200' : ''}`"
+                       :id="name" :type="type" :disabled="disabled"
                        :placeholder="placeholder || label" @input="update" :value="value" ref="input">
             </template>
             <a href="javascript:" class="absolute text-gray-400 font-bold" v-if="withClear && value"
@@ -87,7 +89,11 @@
                 type: Boolean,
                 default: false
             },
-            subText: String
+            subText: String,
+            disabled: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {
