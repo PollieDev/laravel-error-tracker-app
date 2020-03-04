@@ -42,7 +42,8 @@ class UserController extends Controller
                 'title' => 'Creating new user'
             ],
             /*'user' => new UserResource($user),*/
-            'roles' => $roles
+            'roles' => $roles,
+            "admin_edit" => true
         ]);
     }
 
