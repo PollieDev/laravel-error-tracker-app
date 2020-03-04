@@ -1,6 +1,7 @@
 window._ = require('lodash');
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.moment = require('moment');
 
 import Vue from 'vue'
 import PortalVue from 'portal-vue'

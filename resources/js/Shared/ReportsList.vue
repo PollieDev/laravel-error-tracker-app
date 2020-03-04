@@ -56,14 +56,13 @@
 </template>
 
 <script>
-    import moment from 'moment';
     import Status from "./Status";
 
     export default {
         components: {Status},
         methods: {
             moment(date) {
-                return moment(date);
+                return window.moment(date);
             }
         }
     }

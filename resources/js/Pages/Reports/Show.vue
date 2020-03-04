@@ -108,7 +108,6 @@
     import Modal from "../../Shared/Modal";
     import App from "./Tabs/App";
     import Git from "./Tabs/Git";
-    import moment from 'moment';
 
     export default {
         components: {Modal},
@@ -159,7 +158,7 @@
             },
 
             moment(date) {
-                return moment(date);
+                return window.moment(date);
             }
         }
     }
