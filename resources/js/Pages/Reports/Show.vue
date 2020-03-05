@@ -108,6 +108,7 @@
     import Modal from "../../Shared/Modal";
     import App from "./Tabs/App";
     import Git from "./Tabs/Git";
+    import MetaData from "./Tabs/MetaData";
 
     export default {
         components: {Modal},
@@ -127,11 +128,14 @@
                     {
                         title: "App",
                         component: App
-                    }
-                    ,
+                    },
                     {
                         title: "Git",
                         component: Git
+                    },
+                    {
+                        title: "Meta data",
+                        component: MetaData
                     }
                 ],
 

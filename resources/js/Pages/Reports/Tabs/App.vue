@@ -28,12 +28,6 @@
             </template>
             <span>{{ env.php_version }}</span>
         </info-item>
-        <info-item>
-            <template v-slot:title>
-                Polyfier Version
-            </template>
-            <span>{{ env.polyfier_version }}</span>
-        </info-item>
 
         <info-item>
             <h2 class="text-lg font-bold">Route</h2>
