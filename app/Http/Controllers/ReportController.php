@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReportResource;
 use App\Report;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,6 +46,7 @@ class ReportController extends Controller
                 $q->where('website', "LIKE", "%$website%");
             }
         });
+
         return Inertia::render('Reports/Index', [
             "meta"    => [
                 "title" => $title
@@ -59,17 +61,16 @@ class ReportController extends Controller
 
     public function show(Request $request, Report $report) {
         $report->load('user');
-        $reports_count = Report::query()
-            ->where('website', $report->website)
-            ->where('id', '!=', $report->id)
-            ->count();
+        $occurrences = $report->getRelated(fn($q) => $q->with('user'));
+        $reports_count = $report->getUnrelated()->count();
 
         return Inertia::render('Reports/Show', [
             "meta"    => [
                 "title" => "Report detail of " . $report->website
             ],
             "reports_count" => $reports_count,
-            "report"  => $report
+            "report"  => $report,
+            "occurrences" => ReportResource::collection($occurrences)
         ]);
     }
 
@@ -78,12 +79,12 @@ class ReportController extends Controller
             "resolved" => "required|boolean"
         ]);
 
-        $data["resolved_at"] = $data["resolved"] ? Carbon::now() : null;
-        $data["user_id"] = $data["resolved"] ? Auth::id() : null;
-        unset($data["resolved"]);
-        $report->update($data);
+        $report->getRelated()->each->update([
+            "resolved_at" => $data["resolved"] ? Carbon::now() : null,
+            "user_id" => $data["resolved"] ? Auth::id() : null
+        ]);
 
-        return back()->with('message', $data["resolved_at"] ?
+        return back()->with('message', $data["resolved"] ?
             'Error has been marked as resolved' :
             'Error has been marked as unresolved'
         );

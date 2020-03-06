@@ -14,7 +14,7 @@
                 </input-val>
             </div>
         </div>
-        <reports-list/>
+        <reports-list :reports="$page.reports"/>
     </div>
 </template>
 

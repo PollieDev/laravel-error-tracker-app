@@ -44,12 +44,12 @@
             <div class="p-4">
                 <div class="sm:hidden">
                     <select class="form-select block w-full" v-model="activeTabId">
-                        <option v-for="(tab, id) in tabs" :key="id" :value="id">{{ tab.title }}</option>
+                        <option v-for="(tab, id) in tabs" :key="id" :value="id" v-if="tab">{{ tab.title }}</option>
                     </select>
                 </div>
                 <div class="hidden sm:block">
                     <nav class="flex justify-center">
-                        <a href="#" v-for="(tab, id) in tabs" :key="id" @click="activeTabId = id"
+                        <a href="#" v-for="(tab, id) in tabs" :key="id" @click="activeTabId = id" v-if="tab"
                            class="mx-2 px-3 py-2 font-medium text-sm leading-5 rounded-md  focus:outline-none select-none"
                            :class="id === activeTabId ? 'text-indigo-700 bg-indigo-100' : 'text-gray-500 hover:text-gray-700'">
                             {{ tab.title }}
@@ -109,6 +109,7 @@
     import App from "./Tabs/App";
     import Git from "./Tabs/Git";
     import MetaData from "./Tabs/MetaData";
+    import Occurrences from "./Tabs/Occurrences";
 
     export default {
         components: {Modal},
@@ -133,10 +134,14 @@
                         title: "Git",
                         component: Git
                     },
-                    {
+                    Object.keys(this.$page.report.vars.meta).length > 0 ? {
                         title: "Meta data",
                         component: MetaData
-                    }
+                    } : null,
+                    this.$page.occurrences.length > 1 ? {
+                        title: "Occurrences",
+                        component: Occurrences
+                    } : null
                 ],
 
                 deleteItemModal: false

@@ -1,20 +1,30 @@
 <template>
     <div class="flex items-center text-sm leading-5 text-gray-500">
-        <template v-if="report.resolved_at">
-            <i class="fas fa-check-circle flex-shrink-0 mr-1.5 h-5 w-5 text-green-400 flex items-center"></i>
-            Resolved {{ !$page.report && report.resolved_at ? 'by ' + report.user.name : '' }}
+        <template v-if="count">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800">
+                Occurred {{ count }} time{{ count !== 1 ? 's' : '' }}
+            </span>
         </template>
-        <template v-else>
-            <i class="fas fa-times-circle flex-shrink-0 mr-1.5 h-5 w-5 text-red-600 flex items-center"></i>
-            Unresolved
-        </template>
+        <span :class="count ? 'ml-2' : ''">
+            <template v-if="report.resolved_at">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Resolved {{ !$page.report && report.resolved_at ? 'by ' + report.user.name : '' }}
+                </span>
+            </template>
+            <template v-else>
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                    Unresolved
+                </span>
+            </template>
+        </span>
     </div>
 </template>
 
 <script>
     export default {
         props: {
-            report: Object
+            report: Object,
+            count: Number
         }
     }
 </script>

@@ -22,7 +22,8 @@ class ReportResource extends JsonResource
             "created_at" => $this->created_at,
             "user" => $this->user ? [
                 "name" => $this->user->name
-            ] : null
+            ] : null,
+            "occurrences" => $this->occurrences
         ];
     }
 }
