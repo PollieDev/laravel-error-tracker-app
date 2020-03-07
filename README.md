@@ -44,6 +44,6 @@ This will create an admin user with the provided information and a temporary nam
 Once logged in on the app you'll be able to change your name and password as you wish.
 
 ## Screenshots
-![image](/screenshots/reports.png)
-![image](/screenshots/report_detail.png)
-![image](/screenshots/report_detail_occurrences.png)
+![image](/screenshots/error_reports.png)
+![image](/screenshots/error_report_detail.png)
+![image](/screenshots/error_report_detail_occurrences.png)
