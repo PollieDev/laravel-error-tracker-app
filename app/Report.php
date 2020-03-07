@@ -39,20 +39,26 @@ class Report extends Model
         return "uuid";
     }
 
-    public function scopeOccurrences(Builder $q) {
-        $q
-            ->selectRaw('*, JSON_EXTRACT(vars, "$.message") as message, JSON_EXTRACT(vars, "$.frames[0].file") as file, COUNT(*) as occurrences')
-            ->groupBy('website', 'message', 'file');
+    public static function groupByOccurrences(Collection $collection): Collection {
+        return $collection
+            ->groupBy(fn(Report $report) => $report->website . "-" . $report->vars["message"] . "-" . $report->vars["frames"][0]["file"])
+            ->values()
+            ->map(function(Collection $collection) {
+                $report = $collection->first();
+                $report->occurrences = $collection->count();
+                return $report;
+            });
     }
 
     public static function GetList($where = []): AnonymousResourceCollection {
         return ReportResource::collection(
-            Report::with('user')
-                ->occurrences()
-                ->where($where)
-                ->with('user')
-                ->orderBy('created_at', 'DESC')
-                ->get()
+            self::groupByOccurrences(
+                Report::with('user')
+                    ->where($where)
+                    ->with('user')
+                    ->orderBy('created_at', 'DESC')
+                    ->get()
+            )
         );
     }
 
@@ -89,13 +95,12 @@ class Report extends Model
                             ]
                         ]
                     ]);
-            })
-            ->occurrences();
+            });
 
         if ($closure)
             $closure($query);
 
-        return $query->get();
+        return self::groupByOccurrences($query->get());
     }
 
 }

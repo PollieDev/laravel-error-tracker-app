@@ -21,9 +21,14 @@ class ReportController extends Controller
 
     public function webhook(Request $request) {
         $rawPostData = file_get_contents("php://input");
-        Report::create([
+        $report = Report::create([
             "website" => $request->get("website"),
             "vars"    => json_decode($rawPostData, true)
+        ]);
+
+        $report->getRelated()->each->update([
+            "resolved_at" => null,
+            "user_id" => null
         ]);
 
         // TODO: Send warnings to Slack, mail, etc...?
@@ -47,6 +52,11 @@ class ReportController extends Controller
             }
         });
 
+        if ($sort = $request->get('sort')) {
+            if ($sort === "occurrences")
+                $reports = collect($reports)->sortByDesc('occurrences')->values();
+        }
+
         return Inertia::render('Reports/Index', [
             "meta"    => [
                 "title" => $title
@@ -54,7 +64,8 @@ class ReportController extends Controller
             "reports" => $reports,
             "filters" => [
                 "all" => $request->get('all') === "true",
-                "website" => $request->get('website')
+                "website" => $request->get('website'),
+                "sort" => $request->get('sort', 'date')
             ]
         ]);
     }

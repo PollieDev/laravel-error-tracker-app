@@ -3,14 +3,21 @@
         <div class="bg-white shadow overflow-hidden sm:rounded-md mb-3">
             <div class="p-3 border-b border-gray-200 sm:px-6 flex justify-between">
                 <div class="flex items-center">
+                    <input-val type="select" v-model="filters.all" class="text-gray-500">
+                        <option :value="false">Unhandeled reports</option>
+                        <option :value="true">All reports</option>
+                    </input-val>
+                    <span class="mx-2 text-sm text-gray-500">
+                        <b>from</b>
+                    </span>
                     <input-val v-model="filters.website" placeholder="Website..." class="text-gray-500"/>
                     <span class="ml-2 text-sm text-gray-400">
                         <b>{{ $page.reports.length || "No" }}</b> report{{ $page.reports.length !== 1 ? 's' : '' }} found
                     </span>
                 </div>
-                <input-val type="select" v-model="filters.all" class="text-gray-500">
-                    <option :value="false">Unhandeled reports</option>
-                    <option :value="true">All reports</option>
+                <input-val type="select" v-model="filters.sort" class="text-gray-500">
+                    <option value="date">Ordered by date</option>
+                    <option value="occurrences">Ordered by occurrences count</option>
                 </input-val>
             </div>
         </div>
@@ -30,7 +37,8 @@
             return {
                 filters: {
                     website: this.$page.filters.website,
-                    all: this.$page.filters.all
+                    all: this.$page.filters.all,
+                    sort: this.$page.filters.sort
                 },
 
                 timeout: null
@@ -45,6 +53,9 @@
             },
             "filters.all"() {
                 this.applyFilters();
+            },
+            "filters.sort"() {
+                this.applyFilters();
             }
         },
         methods: {
@@ -54,8 +65,10 @@
 
                 if (this.filters.website)
                     params['website'] = this.filters.website;
-                if (this.filters.all === 'true')
+                if (this.filters.all === 'true' || this.filters.all === true)
                     params['all'] = 'true';
+                if (this.filters.sort)
+                    params['sort'] = this.filters.sort;
 
                 params = Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
                 this.$inertia.visit(`${url}${params.length > 0 ? '?' : ''}${params}`, {

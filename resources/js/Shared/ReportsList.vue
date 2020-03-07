@@ -24,7 +24,8 @@
                                         <span class="truncate">{{ report.website }}</span>
                                     </div>
                                 </div>
-                                <div class="hidden md:flex pr-10 flex-shrink-0 items-center">
+                                <div class="hidden md:flex pr-10 flex-shrink-0 items-center"
+                                     :style="{ 'min-width': maxWidth }" ref="right_content">
                                     <div v-if="!compact">
                                         <div class="text-sm leading-5 text-gray-900">
                                             Last occurence on
@@ -64,16 +65,34 @@
 
     export default {
         props: {
-            reports: Object,
+            reports: Array,
             compact: {
                 type: Boolean,
                 default: false
             }
         },
         components: {Status},
+        data() {
+            return {
+                maxWidth: null
+            }
+        },
+        mounted() {
+            this.calcMaxWidth()
+        },
+        updated() {
+            this.calcMaxWidth()
+        },
         methods: {
             moment(date) {
                 return window.moment(date);
+            },
+            calcMaxWidth() {
+                if (!this.$refs.right_content)
+                    return null;
+
+                const sorted = this.$refs.right_content.sort((a, b) => b.clientWidth - a.clientWidth);
+                this.maxWidth = sorted[0].clientWidth + "px";
             }
         }
     }
