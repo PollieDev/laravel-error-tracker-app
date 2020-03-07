@@ -46,3 +46,4 @@ Once logged in on the app you'll be able to change your name and password as you
 ## Screenshots
 ![image](/screenshots/reports.png)
 ![image](/screenshots/report_detail.png)
+![image](/screenshots/report_detail_occurrences.png)
