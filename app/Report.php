@@ -41,7 +41,7 @@ class Report extends Model
 
     public static function groupByOccurrences(Collection $collection): Collection {
         return $collection
-            ->groupBy(fn(Report $report) => $report->website . "-" . $report->vars["message"] . "-" . $report->vars["frames"][0]["file"])
+            ->groupBy(fn(Report $report) => $report->website . "-" . $report->vars["message"] . "-" . ($report->vars["frames"][0]["file"] ?? ""))
             ->values()
             ->map(function(Collection $collection) {
                 $report = $collection->first();
