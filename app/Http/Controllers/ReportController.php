@@ -102,7 +102,7 @@ class ReportController extends Controller
     }
 
     public function destroy(Report $report) {
-        $report->delete();
+        $report->getRelated()->each->delete();
         return redirect()->route('reports.index')->with('message', 'Error has been deleted.');
     }
 
