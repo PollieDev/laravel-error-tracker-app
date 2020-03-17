@@ -17,7 +17,7 @@
                                 <i class="fas fa-link text-sm text-indigo-600"></i>
                             </a>
                         </h3>
-                        <p class="mt-1 text-sm leading-5 text-gray-500 truncate">
+                        <p class="mt-1 text-sm leading-5 text-gray-500">
                             {{ error }}
                         </p>
                     </div>

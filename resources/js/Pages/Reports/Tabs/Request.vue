@@ -122,6 +122,9 @@
                 return this.$page.report.vars.request_data;
             },
             cookies() {
+                if (!this.request.headers.cookie)
+                    return {};
+
                 const rawCookies = this.request.headers.cookie.join(";").split(";");
                 let cookies = {};
                 rawCookies.forEach(raw => {

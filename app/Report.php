@@ -70,7 +70,7 @@ class Report extends Model
             ->whereJsonContains('vars', [
                 'frames' => [
                     0 => [
-                        'file' => $this->vars['frames'][0]['file']
+                        'file' => $this->vars['frames'][0]['file'] ?? null
                     ]
                 ]
             ]);
@@ -91,7 +91,7 @@ class Report extends Model
                     ->whereJsonContains('vars', [
                         'frames' => [
                             0 => [
-                                'file' => $this->vars['frames'][0]['file']
+                                'file' => $this->vars['frames'][0]['file'] ?? null
                             ]
                         ]
                     ]);
